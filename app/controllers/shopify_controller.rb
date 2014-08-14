@@ -57,8 +57,10 @@ class ShopifyController < ApplicationController
 	end
 
 	def order
-		data = JSON.parse(request.body)
-logger.info(data)
+		@orders = ShopifyAPI::Order.find(:all)
+		@orders.each do |order|
+			
+		end
 	end
 
 end

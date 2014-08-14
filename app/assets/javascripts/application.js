@@ -21,4 +21,9 @@ $(document).ready(function(){
 			console.log(data);
 		});
 	});
+	$('#order').click(function(){
+		$.post('/shopify/order', function(data){
+			console.log(data);
+		});
+	});
 });
