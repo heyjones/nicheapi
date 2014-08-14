@@ -14,3 +14,11 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+$(document).ready(function(){
+	$('#import').click(function(){
+		$.post('/products/import', function(data){
+			console.log(data);
+		});
+	});
+});
