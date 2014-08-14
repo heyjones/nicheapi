@@ -57,7 +57,8 @@ class ShopifyController < ApplicationController
 	end
 
 	def order
-		
+		data = JSON.parse(request.body)
+logger.info(data)
 	end
 
 end

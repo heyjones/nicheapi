@@ -17,7 +17,7 @@
 
 $(document).ready(function(){
 	$('#import').click(function(){
-		$.post('/products/import', function(data){
+		$.post('/shopify/import', function(data){
 			console.log(data);
 		});
 	});
