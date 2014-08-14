@@ -1,5 +1,6 @@
 Nicheapi::Application.routes.draw do
 
+  root 'shopify#index'
   post 'products/import' => 'shopify#import'
 
   # The priority is based upon order of creation: first created -> highest priority.
