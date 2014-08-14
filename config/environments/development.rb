@@ -26,4 +26,8 @@ Nicheapi::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
+
+  # Shopify API connection credentials:
+  ShopifyAPI::Base.site = "https://bb7f6f8f42e0d4ed3ea35a8dba7d9365:8a4438c659e87588599625a3e8726a92@nicheapi.myshopify.com/admin"
+
 end

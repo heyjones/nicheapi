@@ -77,4 +77,8 @@ Nicheapi::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  # Shopify API connection credentials:
+  ShopifyAPI::Base.site = "https://bb7f6f8f42e0d4ed3ea35a8dba7d9365:8a4438c659e87588599625a3e8726a92@nicheapi.myshopify.com/admin"
+
 end
