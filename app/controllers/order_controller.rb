@@ -1,18 +1,13 @@
 class OrderController < ApplicationController
 
 	def create
-		@order = ShopifyAPI::Order.find(params[:id])
-logger.info @order
-# 		orderNo = 0
-# 		products = []
-# 
-# 		for(line_item in req.body.line_items){
-# 			var Product = new Object();
-# 			Product.barcode = req.body.line_items[line_item].sku;
-# 			Product.qty = req.body.line_items[line_item].quantity;
-# 			Products.push(Product);
-# 		}
-# 
+		order = ShopifyAPI::Order.find(params[:id])
+logger.info order
+		products = []
+		order.line_items.each do |line_item|
+			products.push([line_item.sku, line_item.quantity])
+		end
+logger.info products
 # 		var Person = new Object();
 # 		Person.firstName = req.body.customer.first_name;
 # 		Person.lastName = req.body.customer.last_name;
