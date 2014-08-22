@@ -3,13 +3,13 @@ class OrderController < ApplicationController
 	skip_before_filter :verify_authenticity_token
 
 	def new
-		logger.info params
 # 		order = ShopifyAPI::Order.find(params[:id])
-# 		products = []
-# 		order.line_items.each do |line_item|
-# 			products.push([line_item.sku, line_item.quantity])
-# 		end
-# logger.info products
+		id = 0
+ 		products = []
+ 		params[:line_items].each do |line_item|
+ 			products.push([line_item.sku, line_item.quantity])
+ 		end
+logger.info products
 # 		var Person = new Object();
 # 		Person.firstName = req.body.customer.first_name;
 # 		Person.lastName = req.body.customer.last_name;
