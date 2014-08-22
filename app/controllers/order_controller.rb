@@ -4,12 +4,11 @@ class OrderController < ApplicationController
 
 	def create
 		order = ShopifyAPI::Order.find(params[:id])
-logger.info order
 		products = []
 		order.line_items.each do |line_item|
-			products.push([line_item.sku, line_item.quantity])
+logger.info line_item
+			#products.push([line_item.sku, line_item.quantity])
 		end
-logger.info products
 # 		var Person = new Object();
 # 		Person.firstName = req.body.customer.first_name;
 # 		Person.lastName = req.body.customer.last_name;
