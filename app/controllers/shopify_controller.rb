@@ -28,7 +28,7 @@ class ShopifyController < ApplicationController
 			@products = Niche.style_products(style).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
 			@products.each do |product|
 				variant = ShopifyAPI::Variant.new(
-					:barcode => "BARCODE",
+					:barcode => product[:barcode],
 					:grams => product[:weight],
 					:fulfillment_service => "manual",
 					:inventory_management => "shopify",
@@ -37,6 +37,7 @@ class ShopifyController < ApplicationController
 					:option2 => product[:size],
 					:price => style[:web_price][:local_unit_price_ex_tax1].to_f.round(2),
 					:requires_shipping => true,
+					:sku => product[:barcode],
 					:taxable => true,
 					:title => product[:color] + " - " + product[:size]
 				)
