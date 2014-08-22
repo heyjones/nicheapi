@@ -5,7 +5,7 @@ Nicheapi::Application.routes.draw do
   post 'shopify/import' => 'shopify#import'
   post 'shopify/order' => 'shopify#order'
 
-  post 'order/create' => 'order#create'
+  post 'order/new' => 'order#new'
   post 'order/cancel' => 'order#cancel'
 
   # The priority is based upon order of creation: first created -> highest priority.
