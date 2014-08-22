@@ -67,22 +67,22 @@ logger.info @order
 	end
 
 	def fulfill
-		var id = req.params.id;
-		var post_data = {
-			'fulfillment': {
-				'tracking_number': '123456789',
-				'notify_customer': false
-			}
-		}
-		var Shopify = new shopifyAPI({
-			shop: 'seedcms.myshopify.com',
-			shopify_api_key: '89fa1ac4b082c6877427bd553b4f64a1',
-			shopify_shared_secret: 'efced55c08389299d01b9fba89e6f303',
-			access_token: 'f4eaa7a2a3da1a3c6d5d808b3737d0b1',
-			verbose: false
-		});
-		Shopify.post('/admin/orders/'+id+'/fulfillments.json', post_data, function(err, data, headers){
-		});
+# 		var id = req.params.id;
+# 		var post_data = {
+# 			'fulfillment': {
+# 				'tracking_number': '123456789',
+# 				'notify_customer': false
+# 			}
+# 		}
+# 		var Shopify = new shopifyAPI({
+# 			shop: 'seedcms.myshopify.com',
+# 			shopify_api_key: '89fa1ac4b082c6877427bd553b4f64a1',
+# 			shopify_shared_secret: 'efced55c08389299d01b9fba89e6f303',
+# 			access_token: 'f4eaa7a2a3da1a3c6d5d808b3737d0b1',
+# 			verbose: false
+# 		});
+# 		Shopify.post('/admin/orders/'+id+'/fulfillments.json', post_data, function(err, data, headers){
+# 		});
 	end
 
 	def cancel
