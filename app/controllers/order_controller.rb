@@ -1,5 +1,7 @@
 class OrderController < ApplicationController
 
+	skip_before_filter :verify_authenticity_token
+
 	def create
 		order = ShopifyAPI::Order.find(params[:id])
 logger.info order
