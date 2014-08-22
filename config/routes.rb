@@ -1,6 +1,7 @@
 Nicheapi::Application.routes.draw do
 
   root 'shopify#index'
+
   post 'shopify/import' => 'shopify#import'
   post 'shopify/order' => 'shopify#order'
 

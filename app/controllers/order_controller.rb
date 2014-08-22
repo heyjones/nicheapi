@@ -3,6 +3,7 @@ class OrderController < ApplicationController
 	skip_before_filter :verify_authenticity_token
 
 	def create
+logger.info 'SUCKSESS'
 logger.info params
 # 		order = ShopifyAPI::Order.find(params[:id])
 # 		products = []
@@ -61,7 +62,7 @@ logger.info params
 # 				});
 # 			});
 # 		});
-		render :status => 200
+		format.json { render json: final_obj, status: :ok }
 	end
 
 	def fulfill
