@@ -60,7 +60,22 @@ class ShopifyController < ApplicationController
 	end
 
 	def order
-logger.info params[:id]
+		products = []
+ 		params[:line_items]each do |line_item|
+ 			products.push([line_item.sku, line_item.quantity])
+ 		end
+ 		person = []
+		person['firstName'] = params[:customer][:first_name]
+		person['lastName'] = params[:customer][:last_name]
+		person['address'] = params[:shipping_address][:address1]
+		person['postcode'] = params[:shipping_address][:zip]
+		person['suburb'] = params[:shipping_address][:city]
+		person['state'] = params[:shipping_address][:province_code]
+		person['email'] = params[:email]
+		person['phone'] = params[:shipping_address][:phone]
+		person['optInMailingList'] = params[:buyer_accepts_marketing]
+		person['countryCodeISO3166_A2'] = params[:shipping_address][:country_code]
+logger.info person
 	end
 
 	def orders
