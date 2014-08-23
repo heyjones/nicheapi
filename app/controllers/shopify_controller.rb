@@ -87,8 +87,7 @@ class ShopifyController < ApplicationController
 		}
 		id = Niche.order(order)
 logger.info id
-#		Niche.logout()
-#
+		Niche.logout()
 		render :status => 200
 	end
 
