@@ -20,6 +20,5 @@ class Niche
 		response = client.call(:log_in, message: { userName: 'staff', password: 'staff' })
 		auth_cookies = response.http.cookies
 		client.call(:create_order, message: { order: order }, cookies: auth_cookies)
-		client.call(:log_out)
 	end
 end
