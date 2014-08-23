@@ -86,10 +86,12 @@ class ShopifyController < ApplicationController
 			:refNo => 'TEST'
 		}
 		login = Niche.login().to_hash[:log_in_response][:log_in_result]
-logger.info login
-#		id = Niche.order(order)
+		if login
+			id = Niche.order(order)
+logger.info id
+		end
 #		Niche.logout()
-#logger.info id
+#
 		render :status => 200
 	end
 
