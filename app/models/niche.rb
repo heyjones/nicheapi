@@ -17,8 +17,9 @@ class Niche
 		client.call(:product_feed_for_style, message: { styleCode: style[:code] })
 	end
 	def self.order(order)
-		client.call(:log_in, message: { userName: 'staff', password: 'staff' })
-		client.call(:create_order, message: { order: order })
+		response = client.call(:log_in, message: { userName: 'staff', password: 'staff' })
+		auth_cookies = response.http.cookies
+		client.call(:create_order, message: { order: order }, cookies: auth_cookies)
 		client.call(:log_out)
 	end
 end
