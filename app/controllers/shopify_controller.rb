@@ -68,7 +68,6 @@ class ShopifyController < ApplicationController
  			}
  			products.push(product)
  		end
-logger.info products
  		person = {
  			:firstName => params[:customer][:first_name],
 			:lastName => params[:customer][:last_name],
@@ -81,17 +80,12 @@ logger.info products
 			:optInMailingList => params[:buyer_accepts_marketing],
 			:countryCodeISO3166_A2 => params[:shipping_address][:country_code]
  		}
-logger.info person
-# 		person['firstName'] = order.customer.first_name
-# 		person['lastName'] = order.customer.last_name
-# 		person['address'] = order.shipping_address.address1
-# 		person['postcode'] = order.shipping_address.zip
-# 		person['suburb'] = order.shipping_address.city
-# 		person['state'] = order.shipping_address.province_code
-# 		person['email'] = order.email
-# 		person['phone'] = order.shipping_address.phone
-# 		person['optInMailingList'] = order.buyer_accepts_marketing
-# 		person['countryCodeISO3166_A2'] = order.shipping_address.country_code
+		order = {
+			:products => products,
+			:person => person,
+			:refNo => 'TEST'
+		}
+logger.info order
 	end
 
 	def orders
