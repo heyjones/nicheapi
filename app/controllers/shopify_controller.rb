@@ -63,27 +63,42 @@ class ShopifyController < ApplicationController
  		products = []
  		params[:line_items].each do |line_item|
  			product = {
-	 			:barcode => line_item[:sku],
-	 			:quantity => line_item[:quantity]
+# 	 			:barcode => line_item[:sku],
+# 	 			:quantity => line_item[:quantity]
+	 			'barcode' => line_item[:sku],
+	 			'quantity' => line_item[:quantity]
  			}
  			products.push(product)
  		end
  		person = {
- 			:firstName => params[:customer][:first_name],
-			:lastName => params[:customer][:last_name],
-			:address => params[:shipping_address][:address1],
-			:postcode => params[:shipping_address][:zip],
-			:suburb => params[:shipping_address][:city],
-			:state => params[:shipping_address][:province_code],
-			:email => params[:email],
-			:phone => params[:shipping_address][:phone],
-			:optInMailingList => params[:buyer_accepts_marketing],
-			:countryCodeISO3166_A2 => params[:shipping_address][:country_code]
+#  			:firstName => params[:customer][:first_name],
+# 			:lastName => params[:customer][:last_name],
+# 			:address => params[:shipping_address][:address1],
+# 			:postcode => params[:shipping_address][:zip],
+# 			:suburb => params[:shipping_address][:city],
+# 			:state => params[:shipping_address][:province_code],
+# 			:email => params[:email],
+# 			:phone => params[:shipping_address][:phone],
+# 			:optInMailingList => params[:buyer_accepts_marketing],
+# 			:countryCodeISO3166_A2 => params[:shipping_address][:country_code]
+ 			'firstName' => params[:customer][:first_name],
+			'lastName' => params[:customer][:last_name],
+			'address' => params[:shipping_address][:address1],
+			'postcode' => params[:shipping_address][:zip],
+			'suburb' => params[:shipping_address][:city],
+			'state' => params[:shipping_address][:province_code],
+			'email' => params[:email],
+			'phone' => params[:shipping_address][:phone],
+			'optInMailingList' => params[:buyer_accepts_marketing],
+			'countryCodeISO3166_A2' => params[:shipping_address][:country_code]
  		}
 		order = {
-			:products => products,
-			:person => person,
-			:refNo => 'TEST'
+# 			:products => products,
+# 			:person => person,
+# 			:refNo => 'TEST'
+			'products' => products,
+			'person' => person,
+			'refNo' => 'TEST'
 		}
 logger.info order.to_hash
 		id = Niche.order(order.to_hash)
