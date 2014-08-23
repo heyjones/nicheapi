@@ -86,7 +86,9 @@ class ShopifyController < ApplicationController
 			:refNo => 'TEST'
 		}
 logger.info order
+		Niche.login()
 		id = Niche.order(order)
+		Niche.logout()
 logger.info id
 		render :status => 200
 		

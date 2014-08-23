@@ -1,6 +1,12 @@
 class Niche
 	extend Savon::Model
 	client wsdl: 'http://dev8.nicheweb.com.au/feed.asmx?wsdl'
+	def self.login()
+		client.call(:log_in, message: { userName: 'staff', password: 'staff' })
+	end
+	def self.logout()
+		client.call(:log_out)
+	end
 	def self.styles()
 		client.call(:style_feed)
 	end
