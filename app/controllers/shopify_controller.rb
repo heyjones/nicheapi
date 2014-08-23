@@ -63,8 +63,8 @@ class ShopifyController < ApplicationController
  		products = {}
  		params[:line_items].each do |line_item|
  			product = {
-	 			:barcode => line_item.sku,
-	 			:quantity => line_item.quantity
+	 			:barcode => line_item[:sku],
+	 			:quantity => line_item[:quantity]
  			}
  			products << product
  		end
