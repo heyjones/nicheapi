@@ -10,4 +10,7 @@ class Niche
 	def self.style_products(style)
 		client.call(:product_feed_for_style, message: { styleCode: style[:code] })
 	end
+	def self.order(order)
+		client.call(:create_order, message: { order: order })
+	end
 end
