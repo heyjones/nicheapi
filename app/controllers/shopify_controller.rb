@@ -1,5 +1,7 @@
 class ShopifyController < ApplicationController
 
+	skip_before_filter :verify_authenticity_token
+
 	def index
  		@orders = ShopifyAPI::Order.find(:all)
  		@styles = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
@@ -58,7 +60,7 @@ class ShopifyController < ApplicationController
 	end
 
 	def order
-logger.info
+logger.info params[:id]
 	end
 
 	def orders
