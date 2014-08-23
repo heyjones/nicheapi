@@ -66,7 +66,7 @@ class ShopifyController < ApplicationController
 	 			:barcode => line_item[:sku],
 	 			:quantity => line_item[:quantity]
  			}
- 			products << product
+ 			products.push(product)
  		end
 logger.info products
  		person = {
