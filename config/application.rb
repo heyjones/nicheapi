@@ -21,6 +21,7 @@ module Nicheapi
     # config.i18n.default_locale = :de
 	if Rails.env.prodution?
 		config.logger = Logger.new(STDOUT)
+		config.middleware.delete ActionDispatch::ParamsParser
 	end
   end
 end
