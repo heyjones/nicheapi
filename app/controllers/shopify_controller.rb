@@ -67,15 +67,15 @@ class ShopifyController < ApplicationController
 #  		end
  		person = {
  			:firstName => params[:customer][:first_name],
-			:lastName = params[:customer][:last_name],
-			:address = params[:shipping_address][:address1],
-			:postcode = params[:shipping_address][:zip],
-			:suburb = params[:shipping_address][:city],
-			:state = params[:shipping_address][:province_code],
-			:email = params[:email],
-			:phone = params[:shipping_address][:phone],
-			:optInMailingList = params[:buyer_accepts_marketing],
-			:countryCodeISO3166_A2 = params[:shipping_address][:country_code]
+			:lastName => params[:customer][:last_name],
+			:address => params[:shipping_address][:address1],
+			:postcode => params[:shipping_address][:zip],
+			:suburb => params[:shipping_address][:city],
+			:state => params[:shipping_address][:province_code],
+			:email => params[:email],
+			:phone => params[:shipping_address][:phone],
+			:optInMailingList => params[:buyer_accepts_marketing],
+			:countryCodeISO3166_A2 => params[:shipping_address][:country_code]
  		}
 logger.info person
 # 		person['firstName'] = order.customer.first_name
