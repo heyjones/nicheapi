@@ -60,7 +60,7 @@ class ShopifyController < ApplicationController
 	end
 
 	def order
- 		products = {}
+ 		products = []
  		params[:line_items].each do |line_item|
  			product = {
 	 			:barcode => line_item[:sku],
