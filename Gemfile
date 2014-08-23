@@ -56,3 +56,5 @@ gem 'shopify_api'
 gem 'rack-cors'
 gem 'savon'
 gem 'libxml-ruby'
+
+gem 'rails_12factor', group: :production

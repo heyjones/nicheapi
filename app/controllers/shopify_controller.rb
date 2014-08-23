@@ -60,7 +60,7 @@ class ShopifyController < ApplicationController
 	end
 
 	def order
-logger.info params[:customer]
+logger.info params[:customer][:first_name]
 # 		order = params.to_hash
 # 		products = []
 #  		order.line_items.each do |line_item|
