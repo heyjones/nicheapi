@@ -60,12 +60,13 @@ class ShopifyController < ApplicationController
 	end
 
 	def order
-		order = params.to_hash
-		products = []
- 		order.line_items.each do |line_item|
- 			products.push([line_item.sku, line_item.quantity])
- 		end
- 		person = []
+logger.info params[:customer]
+# 		order = params.to_hash
+# 		products = []
+#  		order.line_items.each do |line_item|
+#  			products.push([line_item.sku, line_item.quantity])
+#  		end
+#  		person = []
 # 		person['firstName'] = params[:customer][:first_name]
 # 		person['lastName'] = params[:customer][:last_name]
 # 		person['address'] = params[:shipping_address][:address1]
@@ -76,17 +77,17 @@ class ShopifyController < ApplicationController
 # 		person['phone'] = params[:shipping_address][:phone]
 # 		person['optInMailingList'] = params[:buyer_accepts_marketing]
 # 		person['countryCodeISO3166_A2'] = params[:shipping_address][:country_code]
-		person['firstName'] = order.customer.first_name
-		person['lastName'] = order.customer.last_name
-		person['address'] = order.shipping_address.address1
-		person['postcode'] = order.shipping_address.zip
-		person['suburb'] = order.shipping_address.city
-		person['state'] = order.shipping_address.province_code
-		person['email'] = order.email
-		person['phone'] = order.shipping_address.phone
-		person['optInMailingList'] = order.buyer_accepts_marketing
-		person['countryCodeISO3166_A2'] = order.shipping_address.country_code
-logger.info person
+# 		person['firstName'] = order.customer.first_name
+# 		person['lastName'] = order.customer.last_name
+# 		person['address'] = order.shipping_address.address1
+# 		person['postcode'] = order.shipping_address.zip
+# 		person['suburb'] = order.shipping_address.city
+# 		person['state'] = order.shipping_address.province_code
+# 		person['email'] = order.email
+# 		person['phone'] = order.shipping_address.phone
+# 		person['optInMailingList'] = order.buyer_accepts_marketing
+# 		person['countryCodeISO3166_A2'] = order.shipping_address.country_code
+# logger.info person
 	end
 
 	def orders
