@@ -93,12 +93,9 @@ class ShopifyController < ApplicationController
 			'countryCodeISO3166_A2' => params[:shipping_address][:country_code]
  		}
 		order = {
-# 			:products => products,
-# 			:person => person,
-# 			:refNo => 'TEST'
-			'products' => products,
-			'person' => person,
-			'refNo' => 'TEST'
+			:products => products,
+			:person => person,
+			:refNo => 'TEST'
 		}
 logger.info order.to_hash
 		id = Niche.order(order.to_hash)
