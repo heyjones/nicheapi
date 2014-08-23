@@ -60,6 +60,7 @@ class ShopifyController < ApplicationController
 	end
 
 	def order
+		order = params.to_hash
 		products = []
  		params[:line_items].each do |line_item|
  			products.push([line_item.sku, line_item.quantity])
