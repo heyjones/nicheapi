@@ -6,6 +6,11 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env)
 
+if Rails.env.prodution?
+	config.logger = Logger.new(STDOUT)
+	config.middleware.delete ActionDispatch::ParamsParser
+end
+
 module Nicheapi
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -19,9 +24,5 @@ module Nicheapi
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
-	if Rails.env.prodution?
-		config.logger = Logger.new(STDOUT)
-		config.middleware.delete ActionDispatch::ParamsParser
-	end
   end
 end
