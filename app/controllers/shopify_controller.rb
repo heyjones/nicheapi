@@ -58,6 +58,10 @@ class ShopifyController < ApplicationController
 	end
 
 	def order
+logger.info
+	end
+
+	def orders
 		@orders = ShopifyAPI::Order.find(:all)
 		@orders.each do |order|
 			
