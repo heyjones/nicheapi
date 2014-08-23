@@ -60,11 +60,15 @@ class ShopifyController < ApplicationController
 	end
 
 	def order
-# 		order = params.to_hash
-# 		products = []
-#  		order.line_items.each do |line_item|
-#  			products.push([line_item.sku, line_item.quantity])
-#  		end
+ 		products = {}
+ 		params[:line_items].each do |line_item|
+ 			product = {
+	 			:barcode => line_item.sku,
+	 			:quantity => line_item.quantity
+ 			}
+ 			products << product
+ 		end
+logger.info products
  		person = {
  			:firstName => params[:customer][:first_name],
 			:lastName => params[:customer][:last_name],
