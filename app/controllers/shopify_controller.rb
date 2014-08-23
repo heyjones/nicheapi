@@ -85,13 +85,12 @@ class ShopifyController < ApplicationController
 			:person => person,
 			:refNo => 'TEST'
 		}
-logger.info order
-		Niche.login()
-		id = Niche.order(order)
-		Niche.logout()
-logger.info id
+		login = Niche.login()
+logger.info login
+#		id = Niche.order(order)
+#		Niche.logout()
+#logger.info id
 		render :status => 200
-		
 	end
 
 	def orders
