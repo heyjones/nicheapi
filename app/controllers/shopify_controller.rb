@@ -61,7 +61,7 @@ class ShopifyController < ApplicationController
 
 	def order
 		products = []
- 		params[:line_items]each do |line_item|
+ 		params[:line_items].each do |line_item|
  			products.push([line_item.sku, line_item.quantity])
  		end
  		person = []
