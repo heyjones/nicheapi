@@ -3,25 +3,24 @@ class OrderController < ApplicationController
 	skip_before_filter :verify_authenticity_token
 
 	def new
+		id = 0
  		order = ShopifyAPI::Order.find(params[:id])
  		products = []
  		order.line_items.each do |line_item|
  			products.push([line_item.sku, line_item.quantity])
  		end
-logger.info 'CHECKIT'
-logger.info products
-# 		var Person = new Object();
-# 		Person.firstName = req.body.customer.first_name;
-# 		Person.lastName = req.body.customer.last_name;
-# 		Person.address = req.body.shipping_address.address1;
-# 		Person.postcode = req.body.shipping_address.zip;
-# 		Person.suburb = req.body.shipping_address.city;
-# 		Person.state = req.body.shipping_address.province_code;
-# 		Person.email = req.body.email;
-# 		Person.phone = req.body.shipping_address.phone;
-# 		Person.optInMailingList = req.body.buyer_accepts_marketing;
-# 		Person.countryCodeISO3166_A2 = req.body.customer.country_code;
-# 
+ 		person = []
+		person['firstName'] = order.customer.first_name
+		person['lastName'] = order.customer.last_name
+		person['address'] = order.shipping_address.address1
+		person['postcode'] = order.shipping_address.zip
+		person['suburb'] = order.shipping_address.city
+		person['state'] = order.shipping_address.province_code
+		person['email'] = order.email
+		person['phone'] = order.shipping_address.phone
+		person['optInMailingList'] = order.buyer_accepts_marketing
+		person['countryCodeISO3166_A2'] = order.customer.country_code
+
 # 		var Order = new Object();
 # 		Order.products = Products;
 # 		Order.person = Person;
@@ -61,6 +60,9 @@ logger.info products
 # 				});
 # 			});
 # 		});
+		respond_to do |format|
+			format.json { render :json => id }
+		end
 	end
 
 	def fulfill
