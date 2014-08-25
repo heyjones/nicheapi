@@ -19,11 +19,6 @@ class Niche
 	def self.order(order)
 		response = client.call(:log_in, message: { userName: 'staff', password: 'staff' })
 		authorization = response.http.cookies
-		begin
-			client.call(:create_order, message: { order: order }, cookies: authorization)
-		rescue Savon::SOAPFault => error
-			logger.info error.http.code
-			raise
-		end
+		client.call(:create_order, message: { order: order }, cookies: authorization)
 	end
 end
