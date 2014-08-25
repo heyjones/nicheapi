@@ -21,7 +21,7 @@ class Niche
 		authorization = response.http.cookies
 		client.call(:create_order, message: { order: order }, cookies: authorization)
 	rescue Savon::SOAPFault => error
-		Logger.log error.http.code
+		logger.info error.http.code
 		raise
 	end
 end
