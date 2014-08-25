@@ -77,6 +77,7 @@ class ShopifyController < ApplicationController
 			:state => params[:shipping_address][:province_code],
 			:email => params[:email],
 			:phone => params[:shipping_address][:phone],
+			:mobile => params[:shipping_address][:phone],
 			:optInMailingList => params[:buyer_accepts_marketing],
 			:countryCodeISO3166_A2 => params[:shipping_address][:country_code]
  		}
