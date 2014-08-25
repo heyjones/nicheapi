@@ -20,9 +20,8 @@ class Niche
 		response = client.call(:log_in, message: { userName: 'staff', password: 'staff' })
 		authorization = response.http.cookies
 		client.call(:create_order, message: { order: order }, cookies: authorization)
-		rescue Savon::SOAPFault => error
-			logger.log error.http.code
-			raise
-		end
+	rescue Savon::SOAPFault => error
+		logger.log error.http.code
+		raise
 	end
 end
