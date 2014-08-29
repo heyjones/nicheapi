@@ -89,6 +89,8 @@ class ShopifyController < ApplicationController
 logger.info '#####################################################################################################'
 logger.info order.to_json
 		id = Niche.order(order.to_json)
+logger.info id
+logger.info '#####################################################################################################'
 		render :status => 200
 	end
 
