@@ -87,7 +87,6 @@ class ShopifyController < ApplicationController
 			:refNo => 'TEST'
 		}
 		id = Niche.order(order.to_hash)
-logger.info id.soap_fault
 		render :status => 200
 	end
 
