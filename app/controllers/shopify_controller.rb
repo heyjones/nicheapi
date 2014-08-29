@@ -87,8 +87,8 @@ class ShopifyController < ApplicationController
 			:refNo => 'TEST'
 		}
 logger.info '#####################################################################################################'
-logger.info order.to_json
-		id = Niche.order(order.to_json)
+logger.info order.to_hash
+		id = Niche.order(order.to_hash)
 logger.info id
 logger.info '#####################################################################################################'
 		render :status => 200
