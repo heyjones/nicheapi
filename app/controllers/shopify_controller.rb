@@ -78,7 +78,7 @@ class ShopifyController < ApplicationController
 			:email => params[:email],
 			:phone => params[:shipping_address][:phone],
 			:mobile => params[:shipping_address][:phone],
-			:optInMailingList => 0,#params[:buyer_accepts_marketing],
+			:optInMailingList => params[:buyer_accepts_marketing],
 			:countryCodeISO3166_A2 => params[:shipping_address][:country_code]
  		}
 		order = {
@@ -86,11 +86,8 @@ class ShopifyController < ApplicationController
 			:person => person,
 			:refNo => 'TEST'
 		}
-logger.info '#####################################################################################################'
-logger.info order.to_hash
 		id = Niche.order(order.to_hash)
 logger.info id
-logger.info '#####################################################################################################'
 		render :status => 200
 	end
 
