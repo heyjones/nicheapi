@@ -19,6 +19,6 @@ class Niche
 	def self.order(order)
 		response = client.call(:log_in, message: { userName: 'staff', password: 'staff' })
 		authorization = response.http.cookies
-		client.call(:create_order, message: { order: order }, cookies: authorization, version: 2)
+		client.call(:create_order, message: { order: order }, cookies: authorization, response_parser: :rexml)
 	end
 end
