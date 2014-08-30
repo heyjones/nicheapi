@@ -20,7 +20,5 @@ class Niche
 		response = client.call(:log_in, message: { userName: 'staff', password: 'staff' })
 		authorization = response.http.cookies
 		client.call(:create_order, message: { order: order }, cookies: authorization, advanced_typecasting: false)
-	rescue Savon::HTTPError => error
-		raise error.http.code
 	end
 end
