@@ -4,6 +4,7 @@ Nicheapi::Application.routes.draw do
 
   post 'shopify/import' => 'shopify#import'
   post 'shopify/order' => 'shopify#order'
+  post 'shopify/test' => 'shopify#test'
 
   post 'order/new' => 'order#new'
   post 'order/cancel' => 'order#cancel'

@@ -3,8 +3,8 @@ class ShopifyController < ApplicationController
 	skip_before_filter :verify_authenticity_token
 
 	def index
- 		@orders = ShopifyAPI::Order.find(:all)
- 		@styles = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
+# 		@orders = ShopifyAPI::Order.find(:all)
+# 		@styles = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
 # 		@products = Niche.products.to_hash[:product_feed_response][:product_feed_result][:product]
 	end
 
@@ -99,6 +99,34 @@ logger.info '#################################FINISH'
 		@orders.each do |order|
 			
 		end
+	end
+
+	def test
+		products = []
+		product = {
+ 			:barcode => "1234500001802",
+ 			:qty => 1
+		}
+		products.push(product)
+ 		person = {
+ 			:firstName => "Chris",
+			:lastName => "Jones",
+			:address => "321 N Wayne Ave",
+			:postcode => "92833",
+			:suburb => "Fullerton",
+			:state => "CA",
+			:email => "chris@seedcms.com",
+			:phone => "9494131049",
+			:mobile => "9494131049",
+			:optInMailingList => "false",
+			:countryCodeISO3166_A2 => "US"
+ 		}
+		order = {
+			:products => products,
+			:person => person,
+			:refNo => 'TEST'
+		}
+		id = Niche.order(order).to_hash[:create_order_response][:create_order_result]
 	end
 
 end
