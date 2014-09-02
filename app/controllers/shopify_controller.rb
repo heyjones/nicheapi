@@ -60,7 +60,8 @@ class ShopifyController < ApplicationController
 	end
 
 	def order
-		orderID = params[:id]
+		@order = ShopifyAPI::Order.find(params[:id])
+		#NICHE
  		person = {
 			:email => params[:email],
  			:firstName => params[:customer][:first_name],
@@ -85,9 +86,18 @@ class ShopifyController < ApplicationController
 		order = {
 			:person => person,
 			:products => products,
-			:refNo => 'TEST'
-		}.to_hash
+			:refNo => @order.id
+		}
 		id = Niche.order(order).to_hash[:create_order_response][:create_order_result]
+		#SHOPIFY
+		notes = []
+		note = {
+			:name => 'nicheapi',
+			:value => id
+		}
+		notes.push(note)
+		@order.note_attributes = notes
+		@order.save
 		render :status => 200
 	end
 
@@ -97,36 +107,5 @@ class ShopifyController < ApplicationController
 			
 		end
 	end
-
- 	def test
-# 		@order = ShopifyAPI::Order.find(266999463)
-# 		fulfillment = ShopifyAPI::Fulfillment.new(:order_id => @order.id, :status => 'pending')
-# 		fulfillment.save
-# 		products = []
-# 		product = {
-#  			:Barcode => "1234500001802",
-#  			:qty => 1
-# 		}
-# 		products.push(Product: product)
-#  		person = {
-# 			:email => "chris@seedcms.com",
-#  			:firstName => "Chris",
-# 			:lastName => "Jones",
-# 			:address => "321 N Wayne Ave",
-# 			:suburb => "Fullerton",
-# 			:state => "CA",
-# 			:postcode => "92833",
-# 			:countryCodeISO3166_A2 => "US",
-# 			:phone => "9494131049",
-# 			:mobile => "9494131049",
-# 			:optInMailingList => "false"
-#  		}
-# 		order = {
-# 			:person => person,
-# 			:products => products,
-# 			:refNo => "TEST"
-# 		}
-# 		id = Niche.order(order).to_hash[:create_order_response][:create_order_result]
- 	end
 
 end
