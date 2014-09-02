@@ -3,6 +3,7 @@ class Niche
 	client wsdl: 'http://dev8.nicheweb.com.au/feed.asmx?wsdl',
 	log: true,
 	log_level: :debug,
+	convert_request_keys_to: :none,
 	pretty_print_xml: true
 	def self.login()
 		client.call(:log_in, message: { userName: 'staff', password: 'staff' })

@@ -60,37 +60,34 @@ class ShopifyController < ApplicationController
 	end
 
 	def order
- 		products = []
- 		params[:line_items].each do |line_item|
- 			product = {
-	 			:barcode => line_item[:sku],
-	 			:qty => line_item[:quantity]
- 			}
- 			products.push(product)
- 		end
+		orderID = params[:id]
  		person = {
+			:email => params[:email],
  			:firstName => params[:customer][:first_name],
 			:lastName => params[:customer][:last_name],
 			:address => params[:shipping_address][:address1],
-			:postcode => params[:shipping_address][:zip],
 			:suburb => params[:shipping_address][:city],
 			:state => params[:shipping_address][:province_code],
-			:email => params[:email],
+			:postcode => params[:shipping_address][:zip],
+			:countryCodeISO3166_A2 => params[:shipping_address][:country_code],
 			:phone => params[:shipping_address][:phone],
 			:mobile => params[:shipping_address][:phone],
-			:optInMailingList => params[:buyer_accepts_marketing],
-			:countryCodeISO3166_A2 => params[:shipping_address][:country_code]
+			:optInMailingList => params[:buyer_accepts_marketing].to_s
  		}
+ 		products = []
+ 		params[:line_items].each do |line_item|
+ 			product = {
+	 			:Barcode => line_item[:sku],
+	 			:qty => line_item[:quantity]
+ 			}
+ 			products.push(Product: product)
+ 		end
 		order = {
-			:products => products,
 			:person => person,
+			:products => products,
 			:refNo => 'TEST'
 		}.to_hash
-logger.info '##################################START'
-logger.info order
 		id = Niche.order(order).to_hash[:create_order_response][:create_order_result]
-logger.info id
-logger.info '#################################FINISH'
 		render :status => 200
 	end
 
@@ -101,32 +98,35 @@ logger.info '#################################FINISH'
 		end
 	end
 
-	def test
-		products = []
-		product = {
- 			:barcode => "1234500001802",
- 			:qty => 1
-		}
-		products.push(product)
- 		person = {
- 			:firstName => "Chris",
-			:lastName => "Jones",
-			:address => "321 N Wayne Ave",
-			:postcode => "92833",
-			:suburb => "Fullerton",
-			:state => "CA",
-			:email => "chris@seedcms.com",
-			:phone => "9494131049",
-			:mobile => "9494131049",
-			:optInMailingList => "false",
-			:countryCodeISO3166_A2 => "US"
- 		}
-		order = {
-			:products => products,
-			:person => person,
-			:refNo => 'TEST'
-		}
-		id = Niche.order(order).to_hash[:create_order_response][:create_order_result]
-	end
+ 	def test
+# 		@order = ShopifyAPI::Order.find(266999463)
+# 		fulfillment = ShopifyAPI::Fulfillment.new(:order_id => @order.id, :status => 'pending')
+# 		fulfillment.save
+# 		products = []
+# 		product = {
+#  			:Barcode => "1234500001802",
+#  			:qty => 1
+# 		}
+# 		products.push(Product: product)
+#  		person = {
+# 			:email => "chris@seedcms.com",
+#  			:firstName => "Chris",
+# 			:lastName => "Jones",
+# 			:address => "321 N Wayne Ave",
+# 			:suburb => "Fullerton",
+# 			:state => "CA",
+# 			:postcode => "92833",
+# 			:countryCodeISO3166_A2 => "US",
+# 			:phone => "9494131049",
+# 			:mobile => "9494131049",
+# 			:optInMailingList => "false"
+#  		}
+# 		order = {
+# 			:person => person,
+# 			:products => products,
+# 			:refNo => "TEST"
+# 		}
+# 		id = Niche.order(order).to_hash[:create_order_response][:create_order_result]
+ 	end
 
 end
