@@ -104,7 +104,15 @@ class ShopifyController < ApplicationController
 	def orders
 		@orders = ShopifyAPI::Order.find(:all)
 		@orders.each do |order|
-			
+			unless order.note_attributes.empty?
+				notes = order.note_attributes
+				note = notes.select{|x| x.name == 'nicheapi'}
+				id = note.first.value
+				status = Niche.order_status(id).to_hash[:order_status_feed_response][:order_status_feed_result][:status1]
+				if status == 2
+					
+				end
+			end
 		end
 	end
 

@@ -26,8 +26,8 @@ $(document).ready(function(){
 			console.log(data);
 		});
 	});
-	$('#test').click(function(){
-		$.post('/shopify/test', function(data){
+	$('#orders').click(function(){
+		$.post('/shopify/orders', function(data){
 			console.log(data);
 		});
 	});

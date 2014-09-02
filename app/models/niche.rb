@@ -25,4 +25,9 @@ class Niche
 		user = login.http.cookies
 		client.call(:create_order, message: { order: order }, cookies: user)
 	end
+	def self.order_status(orderNo)
+		login = client.call(:log_in, message: { userName: 'staff', password: 'staff' })
+		user = login.http.cookies
+		client.call(:order_status_feed, message: { orderNo: 'R'+orderNo }, cookies: user)
+	end
 end
