@@ -110,7 +110,8 @@ class ShopifyController < ApplicationController
 				id = note.first.value
 				status = Niche.order_status(id).to_hash[:order_status_feed_response][:order_status_feed_result][:status1]
 				if status == 2
-					
+# 					fulfillment = ShopifyAPI::Fulfillment.new(:order_id => order.id, :status => 'pending')
+# 					fulfillment.save
 				end
 			end
 		end
