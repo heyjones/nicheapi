@@ -13,9 +13,11 @@ class ShopifyController < ApplicationController
 		@styles.each do |style|
 			# IMAGES
 			images = []
-			image = {}
-			image['src'] = style[:web_main_picture][:zoom_box_url]
-			images << image
+			if style[:web_main_picture]
+				image = {}
+				image['src'] = style[:web_main_picture][:zoom_box_url]
+				images << image
+			end
 			# OPTIONS
 			options = []
 			option = {}
