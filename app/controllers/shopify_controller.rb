@@ -43,8 +43,8 @@ class ShopifyController < ApplicationController
 				# VARIANTS
 				variants = []
 				variant = {}
-				@products = Niche.style_products(style).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
-				@products.each do |product|
+				products = Niche.style_products(style).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
+				products.each do |product|
 					variant = ShopifyAPI::Variant.new(
 						:barcode => product[:barcode],
 						:grams => product[:weight],
