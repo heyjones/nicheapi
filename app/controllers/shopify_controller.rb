@@ -16,9 +16,11 @@ class ShopifyController < ApplicationController
 			exists = false
 			@products.each do |product|
 				metafields = ShopifyAPI.throttle { product.metafields }
-				metafields.each do |metafield|
-					if metafield.namespace == 'nicheapi' && metafield.key == 'code' && metafield.value == style[:code]
-						exists = true
+				if metafields
+					metafields.each do |metafield|
+						if metafield.namespace == 'nicheapi' && metafield.key == 'code' && metafield.value == style[:code]
+							exists = true
+						end
 					end
 				end
 	 		end
