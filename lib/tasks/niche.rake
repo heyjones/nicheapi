@@ -38,7 +38,7 @@ namespace :niche do
 			variant = {}
 			products = Niche.style_products(style).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
 			products.each do |product|
-				variant = ShopifyAPI::Variant.new(
+				variant = ShopifyAPI.throttle { ShopifyAPI::Variant.new(
 					:barcode => product[:barcode],
 					:grams => product[:weight],
 					:fulfillment_service => "manual",
@@ -51,7 +51,7 @@ namespace :niche do
 					:sku => product[:barcode],
 					:taxable => true,
 					:title => product[:color] + " - " + product[:size]
-				)
+				) }
 				variants << variant
 			end
 			# METAFIELDS
@@ -63,7 +63,7 @@ namespace :niche do
 			metafield['value_type'] = 'string'
 			metafields << metafield
 			# PRODUCT
-			product = ShopifyAPI::Product.new(
+			product = ShopifyAPI.throttle { ShopifyAPI::Product.new(
 				:title => style[:description],
 				:body_html => style[:web_description],
 				:product_type => style[:category],
@@ -72,8 +72,27 @@ namespace :niche do
 				:options => options,
 				:variants => variants,
 				:metafields => metafields
-			)
+			) }
 			product.save
+ 			# COLLECTION
+ 			collection = ShopifyAPI.throttle { ShopifyAPI::CustomCollection.find(:all, :params => { :title => style[:story] } ) }
+ 			if collection.to_a.empty?
+	 			collection = ShopifyAPI.throttle { ShopifyAPI::CustomCollection.new(
+	 				:title => style[:story],
+	 				:collects => [
+	 					{
+		 					:product_id => product.id
+	 					}
+	 				]
+	 			) }
+	 			collection.save
+	 		else
+	 			collect = ShopifyAPI.throttle { ShopifyAPI::Collect.new(
+	 				:product_id => product.id,
+	 				:collection_id => collection.first.id
+	 			) }
+	 			collect.save
+ 			end
 		end
 	end
   end
@@ -86,6 +105,7 @@ namespace :niche do
 				notes = order.note_attributes
 				note = notes.select{|x| x.name == 'nicheapi'}
 				id = note.first.value
+				Niche.login
 				status = Niche.order_status(id).to_hash[:order_status_feed_response][:order_status_feed_result][:status1]
 logger.info status
 				if status == 2
