@@ -1,5 +1,15 @@
 namespace :niche do
 
+  desc "Get products"
+  task getproducts: :environment do
+	@styles = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
+	@styles.each do |style|
+		products = Niche.style_products(style).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
+		products.each do |product|
+		end
+	end
+  end
+
   desc "Sync products"
   task products: :environment do
 	@products = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all) }
