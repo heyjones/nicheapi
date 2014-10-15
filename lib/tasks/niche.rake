@@ -115,9 +115,7 @@ namespace :niche do
 				notes = order.note_attributes
 				note = notes.select{|x| x.name == 'nicheapi'}
 				id = note.first.value
-				Niche.login
 				status = Niche.order_status(id).to_hash[:order_status_feed_response][:order_status_feed_result][:status1]
-logger.info status
 				if status == 2
 # 					fulfillment = ShopifyAPI::Fulfillment.new(:order_id => order.id, :status => 'pending')
 # 					fulfillment.save
