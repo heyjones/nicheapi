@@ -79,6 +79,6 @@ Nicheapi::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   # Shopify API connection credentials:
-  ShopifyAPI::Base.site = "https://4b5e3d4aaef883fcb74cc8ae598ff4d1:6658e7cb5bb7bb19dc7f024eb64aafd4@test-store-part-3.myshopify.com/admin"
+  ShopifyAPI::Base.site = "https://8601617dadcbbd3ca3189a891204f14b:6c6aea3e46232cfa6029c2beb5cf2325@test-store-part-3.myshopify.com/admin"
 
 end

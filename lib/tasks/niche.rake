@@ -109,12 +109,16 @@ namespace :niche do
 
   desc "Sync orders"
   task orders: :environment do
-  		@orders = ShopifyAPI::Order.find(:all)
+  		@orders = ShopifyAPI.throttle { ShopifyAPI::Order.find(:all) }
 		@orders.each do |order|
-			unless order.note_attributes.empty?
-				notes = order.note_attributes
-				note = notes.select{|x| x.name == 'nicheapi'}
-				id = note.first.value
+			id = 0
+			metafields = ShopifyAPI.throttle { order.metafields }
+	  		metafields.each do |metafield|
+	  			if metafield.namespace = 'nicheapi' && metafield.key = 'order'
+	  				id = metafield.value
+	  			end
+	  		end
+	  		if id > 0
 				status = Niche.order_status(id).to_hash[:order_status_feed_response][:order_status_feed_result][:status1]
 				if status == 2
 # 					fulfillment = ShopifyAPI::Fulfillment.new(:order_id => order.id, :status => 'pending')
@@ -122,7 +126,6 @@ namespace :niche do
 				end
 			end
 		end
-
   end
 
 end
