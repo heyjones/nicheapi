@@ -135,8 +135,6 @@ puts shopifyProduct.title
 		 	end
 		end
 		# Loop through Shopify products and delete if not in Niche
-		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
-		@shopifyProducts = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all) }
 		@shopifyProducts.each do |shopifyProduct|
 			nicheProductCode = ''
 			shopifyMetafields = ShopifyAPI.throttle { shopifyProduct.metafields }
