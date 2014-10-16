@@ -4,8 +4,8 @@ namespace :niche do
 	task test: :environment do
 	end
 
-	desc "Clear products"
-	task clearproducts: :environment do
+	desc "Reset products"
+	task reset: :environment do
 		@products = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all) }
 		@products.each do |product|
 			ShopifyAPI.throttle { ShopifyAPI::Product.delete(product.id) }
@@ -14,8 +14,8 @@ namespace :niche do
 		@collections.each do |collection|
 			ShopifyAPI.throttle { ShopifyAPI::CustomCollection.delete(collection.id) }
 		end
-		Product.delete_all
-		Variant.delete_all
+# 		Product.delete_all
+# 		Variant.delete_all
 	end
 
   desc "Sync products"
