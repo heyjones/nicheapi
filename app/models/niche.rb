@@ -1,8 +1,8 @@
 class Niche
 	extend Savon::Model
 	client wsdl: 'http://27.111.85.190/feed.asmx?wsdl',
-	log: true,
-	log_level: :debug,
+#	log: true,
+#	log_level: :debug,
 	convert_request_keys_to: :none,
 	pretty_print_xml: true
 	def self.login()
