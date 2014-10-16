@@ -74,18 +74,18 @@ puts 'CREATE'
 			nicheVariants = Niche.style_products(nicheProduct).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
 			nicheVariants.each do |nicheVariant|
 				shopifyVariant = ShopifyAPI.throttle { ShopifyAPI::Variant.new(
-					:barcode => product[:barcode],
-					:grams => product[:weight],
+					:barcode => nicheVariant[:barcode],
+					:grams => nicheVariant[:weight],
 					:fulfillment_service => "manual",
 					:inventory_management => "shopify",
-					:inventory_quantity => product[:available_stock],
-					:option1 => product[:color],
-					:option2 => product[:size],
+					:inventory_quantity => nicheVariant[:available_stock],
+					:option1 => nicheVariant[:color],
+					:option2 => nicheVariant[:size],
 					:price => nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2),
 					:requires_shipping => true,
-					:sku => product[:barcode],
+					:sku => nicheVariant[:barcode],
 					:taxable => true,
-					:title => product[:color] + " - " + product[:size]
+					:title => nicheVariant[:color] + " - " + nicheVariant[:size]
 				) }
 				shopifyVariants << shopifyVariant
 			end
