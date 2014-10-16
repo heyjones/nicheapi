@@ -135,24 +135,41 @@ puts shopifyProduct.title
  			end
 		end
 	end
-	# Loop through Shopify products and delete if not in Niche
-	@shopifyProducts.each do |shopifyProduct|
-		nicheProductCode = ''
-		shopifyMetafields = ShopifyAPI.throttle { shopifyProduct.metafields }
-		if shopifyMetafields
-			shopifyMetafields.each do |shopifyMetafield|
-				if shopifyMetafield.namespace == 'nicheapi' && shopifyMetafield.key == 'code'
-					nicheProductCode = shopifyMetafield.value
+		# Loop through Shopify products and delete if not in Niche
+		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
+		@shopifyProducts = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all) }
+		@shopifyProducts.each do |shopifyProduct|
+			nicheProductCode = ''
+			shopifyMetafields = ShopifyAPI.throttle { shopifyProduct.metafields }
+			if shopifyMetafields
+				shopifyMetafields.each do |shopifyMetafield|
+					if shopifyMetafield.namespace == 'nicheapi' && shopifyMetafield.key == 'code'
+						nicheProductCode = shopifyMetafield.value
+					end
+				end
+			end
+			nicheProduct = @nicheProducts.select{ |nicheProduct| nicheProduct[:code] == nicheProductCode }.first
+			if !nicheProduct
+				shopifyProduct.published_at = nil
+				shopifyProduct.save
+puts 'HIDE'
+puts shopifyProduct.title
+			else
+				if nicheProduct[:inactive].eql? 'True'
+					shopifyProduct.published_at = nil
+					shopifyProduct.save
+puts 'HIDE'
+puts shopifyProduct.title
+				else
+					if shopifyProduct.published_at.nil?
+						shopifyProduct.published_at = Time.now.utc
+						shopifyProduct.save
+puts 'SHOW'
+puts shopifyProduct.title
+					end
 				end
 			end
 		end
-		nicheProduct = @nicheProducts.select{ |nicheProduct| nicheProduct[:code] == nicheProductCode }.first
-		if nicheProduct[:inactive] == true
-			# UPDATE THE SHOPIFY PRODUCT TO HIDDEN
-			puts 'HIDE'
-			puts shopifyProduct.title
-		end
-	end
   end
 
   desc "Sync orders"
