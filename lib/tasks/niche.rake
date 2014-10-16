@@ -44,11 +44,15 @@ puts shopifyProduct.title
  			# CHECK FOR CHANGES TO VARIANTS
 			shopifyVariants.each do |shopifyVariant|
 				nicheVariant = nicheVariants.select{ |nicheVariant| nicheVariant[:barcode] == shopifyVariant.barcode }.first
-				if shopifyVariant.inventory_quantity != nicheVariant[:available_stock] || shopifyVariant.price != nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2)
- 					shopifyVariant.inventory_quantity = nicheVariant[:available_stock]
-					shopifyVariant.price = nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2)
-					shopifyVariant.save
+				shopifyVariantInventory = shopifyVariant.inventory_quantity.to_i
+				nicheVariantInventory = nicheVariant[:available_stock].to_i
+				shopifyVariantPrice = shopifyVariant.price.to_f.round(2)
+				nicheVariantPrice = nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2)
+				if shopifyVariantInventory != nicheVariantInventory or shopifyVariantPrice != nicheVariantPrice
 puts shopifyVariant.title
+ 					shopifyVariant.inventory_quantity = nicheVariantInventory
+					shopifyVariant.price = nicheVariantPrice
+					shopifyVariant.save
 				end
 			end
  		else
@@ -132,23 +136,23 @@ puts shopifyProduct.title
 		end
 	end
 	# Loop through Shopify products and delete if not in Niche
-# 	@products.each do |product|
-# 		code = ''
-# 		metafields = ShopifyAPI.throttle { product.metafields }
-# 		if metafields
-# 			metafields.each do |metafield|
-# 				if metafield.namespace == 'nicheapi' && metafield.key == 'code'
-# 					code = metafield.value
-# 				end
-# 			end
-# 		end
-# 		style = @nicheProducts.select{ |style| style[:code] == code }.first
-# 		if style[:inactive] == true
-# 			# UPDATE THE SHOPIFY PRODUCT TO HIDDEN
-# 			puts 'HIDE'
-# 			puts product.title
-# 		end
-# 	end
+	@shopifyProducts.each do |shopifyProduct|
+		nicheProductCode = ''
+		shopifyMetafields = ShopifyAPI.throttle { shopifyProduct.metafields }
+		if shopifyMetafields
+			shopifyMetafields.each do |shopifyMetafield|
+				if shopifyMetafield.namespace == 'nicheapi' && shopifyMetafield.key == 'code'
+					nicheProductCode = shopifyMetafield.value
+				end
+			end
+		end
+		nicheProduct = @nicheProducts.select{ |nicheProduct| nicheProduct[:code] == nicheProductCode }.first
+		if nicheProduct[:inactive] == true
+			# UPDATE THE SHOPIFY PRODUCT TO HIDDEN
+			puts 'HIDE'
+			puts shopifyProduct.title
+		end
+	end
   end
 
   desc "Sync orders"
