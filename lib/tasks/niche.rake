@@ -2,17 +2,23 @@ namespace :niche do
 
 	desc "TEST"
 	task test: :environment do
+		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
+		@nicheProducts.each do |nicheProduct|
+			puts nicheProduct
+			nicheVariants = Niche.style_products(nicheProduct).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
+			puts nicheVariants
+		end
 	end
 
 	desc "Reset products"
 	task reset: :environment do
-		@products = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all) }
-		@products.each do |product|
-			ShopifyAPI.throttle { ShopifyAPI::Product.delete(product.id) }
+		@shopifyProducts = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all) }
+		@shopifyProducts.each do |shopifyProduct|
+			ShopifyAPI.throttle { ShopifyAPI::Product.delete(shopifyProduct.id) }
 		end
-		@collections = ShopifyAPI.throttle { ShopifyAPI::CustomCollection.find(:all) }
-		@collections.each do |collection|
-			ShopifyAPI.throttle { ShopifyAPI::CustomCollection.delete(collection.id) }
+		@shopifyCollections = ShopifyAPI.throttle { ShopifyAPI::CustomCollection.find(:all) }
+		@shopifyCollections.each do |shopifyCollection|
+			ShopifyAPI.throttle { ShopifyAPI::CustomCollection.delete(shopifyCollection.id) }
 		end
 # 		Product.delete_all
 # 		Variant.delete_all
@@ -43,15 +49,21 @@ puts shopifyProduct.title
 	 			# CHECK FOR CHANGES TO VARIANTS
 				shopifyVariants.each do |shopifyVariant|
 					nicheVariant = nicheVariants.select{ |nicheVariant| nicheVariant[:barcode] == shopifyVariant.barcode }.first
-					shopifyVariantInventory = shopifyVariant.inventory_quantity.to_i
-					nicheVariantInventory = nicheVariant[:available_stock].to_i
-					shopifyVariantPrice = shopifyVariant.price.to_f.round(2)
-					nicheVariantPrice = nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2)
-					if shopifyVariantInventory != nicheVariantInventory or shopifyVariantPrice != nicheVariantPrice
+					if !nicheVariant
+puts 'DELETE'
 puts shopifyVariant.title
-	 					shopifyVariant.inventory_quantity = nicheVariantInventory
-						shopifyVariant.price = nicheVariantPrice
-						shopifyVariant.save
+						ShopifyAPI.throttle { ShopifyAPI::Variant.delete(shopifyVariant.id) }
+					else
+						shopifyVariantInventory = shopifyVariant.inventory_quantity.to_i
+						nicheVariantInventory = nicheVariant[:available_stock].to_i
+						shopifyVariantPrice = shopifyVariant.price.to_f.round(2)
+						nicheVariantPrice = nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2)
+						if shopifyVariantInventory != nicheVariantInventory or shopifyVariantPrice != nicheVariantPrice
+puts shopifyVariant.title
+		 					shopifyVariant.inventory_quantity = nicheVariantInventory
+							shopifyVariant.price = nicheVariantPrice
+							shopifyVariant.save
+						end
 					end
 				end
 	 		else
@@ -147,8 +159,9 @@ puts shopifyProduct.title
 			end
 			nicheProduct = @nicheProducts.select{ |nicheProduct| nicheProduct[:code] == nicheProductCode }.first
 			if !nicheProduct
-				shopifyProduct.published_at = nil
-				shopifyProduct.save
+puts 'DELETE'
+puts shopifyProduct.title
+				ShopifyAPI.throttle { ShopifyAPI::Product.delete(shopifyProduct.id) }
 puts 'HIDE'
 puts shopifyProduct.title
 			else
