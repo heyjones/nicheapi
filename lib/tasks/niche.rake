@@ -4,15 +4,32 @@ namespace :niche do
 	task test: :environment do
 		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
 		@nicheProducts.each do |nicheProduct|
-			puts nicheProduct
+			puts nicheProduct[:description] + ',' + nicheProduct[:code]
 			nicheVariants = Niche.style_products(nicheProduct).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
-			puts nicheVariants
+			nicheVariants.each do |nicheVariant|
+				unless nicheVariant[:barcode].nil?
+					puts nicheVariant[:color] + ' - ' + nicheVariant[:size] + ',' + nicheVariant[:barcode]
+				end
+			end
+		end
+		@shopifyProducts = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all, params: { :limit => 250 } ) }
+		@shopifyProducts.each do |shopifyProduct|
+			metafields = ShopifyAPI.throttle { shopifyProduct.metafields }
+			if metafields
+				metafields.each do |metafield|
+					if metafield.namespace == 'nicheapi' && metafield.key == 'code'
+						puts shopifyProduct.title + ',' + metafield.value
+					end
+				end
+			else
+				puts shopifyProduct.title
+			end
 		end
 	end
 
 	desc "Reset products"
 	task reset: :environment do
-		@shopifyProducts = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all) }
+		@shopifyProducts = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all, params: { :limit => 250 } ) }
 		@shopifyProducts.each do |shopifyProduct|
 			ShopifyAPI.throttle { ShopifyAPI::Product.delete(shopifyProduct.id) }
 		end
@@ -20,13 +37,19 @@ namespace :niche do
 		@shopifyCollections.each do |shopifyCollection|
 			ShopifyAPI.throttle { ShopifyAPI::CustomCollection.delete(shopifyCollection.id) }
 		end
+		@orders = ShopifyAPI.throttle { ShopifyAPI::Order.find(:all, params: { :limit => 250, :status => 'any' } ) }
+		@orders.each do |order|
+puts order.id
+			ShopifyAPI.throttle { ShopifyAPI::Order.delete(order.id) }
+		end
 # 		Product.delete_all
 # 		Variant.delete_all
 	end
 
 	desc "Sync products"
 	task products: :environment do
-		@shopifyProducts = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all) }
+		@shopifyProducts = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all, params: { :limit => 250 } ) }
+		# LOOP TO GET ALL PRODUCTS
 		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
 		@nicheProducts.each do |nicheProduct|
 			shopifyId = 0
@@ -88,21 +111,23 @@ puts 'CREATE'
 				shopifyVariant = {}
 				nicheVariants = Niche.style_products(nicheProduct).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
 				nicheVariants.each do |nicheVariant|
-					shopifyVariant = ShopifyAPI.throttle { ShopifyAPI::Variant.new(
-						:barcode => nicheVariant[:barcode],
-						:grams => nicheVariant[:weight],
-						:fulfillment_service => "manual",
-						:inventory_management => "shopify",
-						:inventory_quantity => nicheVariant[:available_stock],
-						:option1 => nicheVariant[:color],
-						:option2 => nicheVariant[:size],
-						:price => nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2),
-						:requires_shipping => true,
-						:sku => nicheVariant[:barcode],
-						:taxable => true,
-						:title => nicheVariant[:color] + " - " + nicheVariant[:size]
-					) }
-					shopifyVariants << shopifyVariant
+					unless nicheVariant[:barcode].nil?
+						shopifyVariant = ShopifyAPI.throttle { ShopifyAPI::Variant.new(
+							:barcode => nicheVariant[:barcode],
+							:grams => nicheVariant[:weight],
+							:fulfillment_service => "manual",
+							:inventory_management => "shopify",
+							:inventory_quantity => nicheVariant[:available_stock],
+							:option1 => nicheVariant[:color],
+							:option2 => nicheVariant[:size],
+							:price => nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2),
+							:requires_shipping => true,
+							:sku => nicheVariant[:barcode],
+							:taxable => true,
+							:title => nicheVariant[:color] + " - " + nicheVariant[:size]
+						) }
+						shopifyVariants << shopifyVariant
+					end
 				end
 				# METAFIELDS
 				shopifyMetafields = []
