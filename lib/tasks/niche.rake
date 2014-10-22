@@ -220,6 +220,10 @@ puts shopifyProduct.title
 			end
 			if nicheId == 0
 puts 'CREATE'
+				phone = shopifyOrder.shipping_address.phone
+				if phone == ''
+					phone = '1234567890'
+				end
 				person = {
 					:email => shopifyOrder.email,
 					:firstName => shopifyOrder.customer.first_name,
@@ -229,8 +233,8 @@ puts 'CREATE'
 					:state => shopifyOrder.shipping_address.province_code,
 					:postcode => shopifyOrder.shipping_address.zip,
 					:countryCodeISO3166_A2 => shopifyOrder.shipping_address.country_code,
-					:phone => shopifyOrder.shipping_address.phone,
-					:mobile => shopifyOrder.shipping_address.phone,
+					:phone => phone,
+					:mobile => phone,
 					:optInMailingList => shopifyOrder.buyer_accepts_marketing.to_s
 				}
 				products = []
