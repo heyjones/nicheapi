@@ -28,6 +28,6 @@ Nicheapi::Application.configure do
   config.assets.debug = true
 
   # Shopify API connection credentials:
-  ShopifyAPI::Base.site = "https://8601617dadcbbd3ca3189a891204f14b:6c6aea3e46232cfa6029c2beb5cf2325@test-store-part-3.myshopify.com/admin"
+  ShopifyAPI::Base.site = "https://dc982685e9d0fbb7057e14e2fc800e05:bef5ee5c81e73e885a1e49cc9fda2ad8@sd360development.myshopify.com/admin"
 
 end
