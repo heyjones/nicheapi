@@ -207,28 +207,67 @@ puts shopifyProduct.title
 		end
 	end
 
-  desc "Sync orders"
-  task orders: :environment do
-  		@orders = ShopifyAPI.throttle { ShopifyAPI::Order.find(:all) }
-		@orders.each do |order|
-			id = 0
-			metafields = ShopifyAPI.throttle { order.metafields }
-	  		metafields.each do |metafield|
-	  			if metafield.namespace = 'nicheapi' && metafield.key = 'order'
-	  				id = metafield.value
-	  			end
-	  		end
-	  		puts id
-	  		if id == 0
-	  			# CREATE THE ORDER IN NICHE
-	  		else
-#				status = Niche.order_status(id).to_hash[:order_status_feed_response][:order_status_feed_result][:status1]
-				if status == 2
-# 					fulfillment = ShopifyAPI::Fulfillment.new(:order_id => order.id, :status => 'pending')
-# 					fulfillment.save
+	desc "Sync orders"
+	task orders: :environment do
+		@shopifyOrders = ShopifyAPI.throttle { ShopifyAPI::Order.find(:all) }
+		@shopifyOrders.each do |shopifyOrder|
+			nicheId = 0
+			shopifyMetafields = ShopifyAPI.throttle { shopifyOrder.metafields }
+			shopifyMetafields.each do |shopifyMetafield|
+				if shopifyMetafield.namespace = 'nicheapi' && shopifyMetafield.key = 'order'
+					nicheId = shopifyMetafield.value
 				end
 			end
+			if nicheId == 0
+puts 'CREATE'
+				person = {
+					:email => shopifyOrder.email,
+					:firstName => shopifyOrder.customer.first_name,
+					:lastName => shopifyOrder.customer.last_name,
+					:address => shopifyOrder.shipping_address.address1,
+					:suburb => shopifyOrder.shipping_address.city,
+					:state => shopifyOrder.shipping_address.province_code,
+					:postcode => shopifyOrder.shipping_address.zip,
+					:countryCodeISO3166_A2 => shopifyOrder.shipping_address.country_code,
+					:phone => shopifyOrder.shipping_address.phone,
+					:mobile => shopifyOrder.shipping_address.phone,
+					:optInMailingList => shopifyOrder.buyer_accepts_marketing.to_s
+				}
+				products = []
+				shopifyOrder.line_items.each do |line_item|
+					product = {
+						:Barcode => line_item.sku,
+						:qty => line_item.quantity
+					}
+					products.push(Product: product)
+				end
+				order = {
+					:person => person,
+					:products => products,
+					:refNo => shopifyOrder.id
+				}
+puts order
+				nicheId = Niche.order(order).to_hash[:create_order_response][:create_order_result]
+				#SHOPIFY
+				ShopifyAPI.throttle { shopifyOrder.add_metafield(ShopifyAPI::Metafield.new({
+	                 :description => '',
+	                 :namespace => 'nicheapi',
+	                 :key => 'order',
+	                 :value => nicheId,
+	                 :value_type => 'integer'
+				})) }
+puts nicheId
+			else
+puts 'UPDATE'
+puts nicheId
+				nicheStatus = Niche.order_status(nicheId).to_hash[:order_status_feed_response][:order_status_feed_result][:status1]
+puts nicheStatus
+#				if status == 2
+# 					fulfillment = ShopifyAPI::Fulfillment.new(:order_id => order.id, :status => 'pending')
+# 					fulfillment.save
+#				end
+			end
 		end
-  end
+	end
 
 end

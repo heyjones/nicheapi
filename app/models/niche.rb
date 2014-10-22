@@ -28,6 +28,6 @@ class Niche
 	def self.order_status(orderNo)
 		login = client.call(:log_in, message: { userName: 'shopify', password: 'shopify' })
 		user = login.http.cookies
-		client.call(:order_status_feed, message: { orderNo: 'R'+orderNo }, cookies: user)
+		client.call(:order_status_feed, message: { orderNo: 'R'+orderNo.to_s }, cookies: user)
 	end
 end
