@@ -2,29 +2,40 @@ namespace :niche do
 
 	desc "TEST"
 	task test: :environment do
-		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
-		@nicheProducts.each do |nicheProduct|
-			puts nicheProduct[:description] + ',' + nicheProduct[:code]
-			nicheVariants = Niche.style_products(nicheProduct).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
-			nicheVariants.each do |nicheVariant|
-				unless nicheVariant[:barcode].nil?
-					puts nicheVariant[:color] + ' - ' + nicheVariant[:size] + ',' + nicheVariant[:barcode]
-				end
-			end
-		end
-		@shopifyProducts = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all, params: { :limit => 250 } ) }
-		@shopifyProducts.each do |shopifyProduct|
-			metafields = ShopifyAPI.throttle { shopifyProduct.metafields }
-			if metafields
-				metafields.each do |metafield|
-					if metafield.namespace == 'nicheapi' && metafield.key == 'code'
-						puts shopifyProduct.title + ',' + metafield.value
-					end
-				end
-			else
-				puts shopifyProduct.title
-			end
-		end
+# 		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
+# 		@nicheProducts.each do |nicheProduct|
+# 			puts nicheProduct[:description] + ',' + nicheProduct[:code]
+# 			nicheVariants = Niche.style_products(nicheProduct).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
+# 			nicheVariants.each do |nicheVariant|
+# 				unless nicheVariant[:barcode].nil?
+# 					puts nicheVariant[:color] + ' - ' + nicheVariant[:size] + ',' + nicheVariant[:barcode]
+# 				end
+# 			end
+# 		end
+# 		@shopifyProducts = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all, params: { :limit => 250 } ) }
+# 		@shopifyProducts.each do |shopifyProduct|
+# 			metafields = ShopifyAPI.throttle { shopifyProduct.metafields }
+# 			if metafields
+# 				metafields.each do |metafield|
+# 					if metafield.namespace == 'nicheapi' && metafield.key == 'code'
+# 						puts shopifyProduct.title + ',' + metafield.value
+# 					end
+# 				end
+# 			else
+# 				puts shopifyProduct.title
+# 			end
+# 		end
+# 		@shopifyOrders = ShopifyAPI.throttle { ShopifyAPI::Order.find(:all) }
+# 		@shopifyOrders.each do |shopifyOrder|
+# 			nicheId = 0
+# 			shopifyMetafields = ShopifyAPI.throttle { shopifyOrder.metafields }
+# 			shopifyMetafields.each do |shopifyMetafield|
+# 				if shopifyMetafield.namespace = 'nicheapi' && shopifyMetafield.key = 'order'
+# 					nicheId = shopifyMetafield.value
+# 				end
+# 			end
+# 			puts shopifyOrder.id.to_s + ' = ' + nicheId.to_s
+# 		end
 	end
 
 	desc "Reset products"
@@ -263,9 +274,9 @@ puts order
 puts nicheId
 			else
 puts 'UPDATE'
-puts nicheId
-				nicheStatus = Niche.order_status(nicheId).to_hash[:order_status_feed_response][:order_status_feed_result][:status1]
-puts nicheStatus
+#puts nicheId
+#				nicheStatus = Niche.order_status(nicheId).to_hash[:order_status_feed_response][:order_status_feed_result][:status1]
+#puts nicheStatus
 #				if status == 2
 # 					fulfillment = ShopifyAPI::Fulfillment.new(:order_id => order.id, :status => 'pending')
 # 					fulfillment.save
