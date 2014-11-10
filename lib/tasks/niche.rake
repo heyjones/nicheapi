@@ -274,7 +274,7 @@ puts order
 puts nicheId
 			else
 puts 'UPDATE'
-#puts nicheId
+puts nicheId
 #				nicheStatus = Niche.order_status(nicheId).to_hash[:order_status_feed_response][:order_status_feed_result][:status1]
 #puts nicheStatus
 #				if status == 2
