@@ -14,21 +14,3 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
-
-$(document).ready(function(){
-	$('#import').click(function(){
-		$.post('/shopify/import', function(data){
-			console.log(data);
-		});
-	});
-	$('#order').click(function(){
-		$.post('/shopify/order', function(data){
-			console.log(data);
-		});
-	});
-	$('#orders').click(function(){
-		$.post('/shopify/orders', function(data){
-			console.log(data);
-		});
-	});
-});
