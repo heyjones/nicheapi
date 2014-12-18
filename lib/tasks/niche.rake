@@ -2,16 +2,16 @@ namespace :niche do
 
 	desc "TEST"
 	task test: :environment do
-# 		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
-# 		@nicheProducts.each do |nicheProduct|
-# 			puts nicheProduct[:description] + ',' + nicheProduct[:code]
-# 			nicheVariants = Niche.style_products(nicheProduct).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
-# 			nicheVariants.each do |nicheVariant|
-# 				unless nicheVariant[:barcode].nil?
-# 					puts nicheVariant[:color] + ' - ' + nicheVariant[:size] + ',' + nicheVariant[:barcode]
-# 				end
-# 			end
-# 		end
+		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
+		@nicheProducts.each do |nicheProduct|
+			puts nicheProduct#[:description] + ',' + nicheProduct[:code]
+			nicheVariants = Niche.style_products(nicheProduct).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
+			nicheVariants.each do |nicheVariant|
+				unless nicheVariant[:barcode].nil?
+					puts nicheVariant#[:color] + ' - ' + nicheVariant[:size] + ',' + nicheVariant[:barcode]
+				end
+			end
+		end
 # 		@shopifyProducts = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all, params: { :limit => 250 } ) }
 # 		@shopifyProducts.each do |shopifyProduct|
 # 			metafields = ShopifyAPI.throttle { shopifyProduct.metafields }
@@ -90,11 +90,14 @@ puts shopifyVariant.title
 					else
 						shopifyVariantInventory = shopifyVariant.inventory_quantity.to_i
 						nicheVariantInventory = nicheVariant[:available_stock].to_i
+						shopifyVariantCompare = shopifyVariant.price.to_f.round(2)
+						nicheVariantCompare = nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2)
 						shopifyVariantPrice = shopifyVariant.price.to_f.round(2)
-						nicheVariantPrice = nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2)
-						if shopifyVariantInventory != nicheVariantInventory or shopifyVariantPrice != nicheVariantPrice
+						nicheVariantPrice = nicheProduct[:discount_price][:local_unit_price_ex_tax1].to_f.round(2)
+						if shopifyVariantInventory != nicheVariantInventory or shopifyVariantCompare != nicheVariantCompare or shopifyVariantPrice != nicheVariantPrice
 puts shopifyVariant.title
 		 					shopifyVariant.inventory_quantity = nicheVariantInventory
+							shopifyVariant.compare_at_price = nicheVariantCompare
 							shopifyVariant.price = nicheVariantPrice
 							shopifyVariant.save
 						end
