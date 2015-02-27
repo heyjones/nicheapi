@@ -1,6 +1,6 @@
 class Niche
 	extend Savon::Model
-	client wsdl: 'http://27.111.85.190/feed.asmx?wsdl',
+	client wsdl: 'http://27.111.85.141/feed.asmx?wsdl',
 #	log: true,
 #	log_level: :debug,
 	convert_request_keys_to: :none,
