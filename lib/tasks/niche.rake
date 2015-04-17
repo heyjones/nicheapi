@@ -1,5 +1,13 @@
 namespace :niche do
 
+	desc "CACHE"
+	task cache: :environment do
+		@products = Product.all
+		@products.each do |product|
+			puts product
+		end
+	end
+
 	desc "TEST"
 	task test: :environment do
 		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
@@ -124,7 +132,7 @@ puts 'CREATE'
 				shopifyVariants = []
 				shopifyVariant = {}
 				nicheVariants = Niche.style_products(nicheProduct).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
-				nicheVariants.each do |nicheVariant|
+				nicheVariants.take(100).each do |nicheVariant|
 					unless nicheVariant[:barcode].nil?
 						shopifyVariant = ShopifyAPI.throttle { ShopifyAPI::Variant.new(
 							:barcode => nicheVariant[:barcode],
