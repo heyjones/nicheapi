@@ -1,5 +1,5 @@
 class Variant < ShopifyAPI::Variant
-	belongs_to :product
+	belongs_to :product, :touch => true
 	has_many :variants
 	def self.cached_variant(id)
 		Rails.cache.fetch('variant/#{id}/#{cache_key}', expires_in: 12.hours) do

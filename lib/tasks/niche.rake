@@ -71,6 +71,7 @@ puts order.id
 		# LOOP TO GET ALL PRODUCTS
 		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
 		@nicheProducts.each do |nicheProduct|
+puts nicheProduct
 			shopifyId = 0
 			@shopifyProducts.each do |shopifyProduct|
 				metafields = ShopifyAPI.throttle { shopifyProduct.metafields }
@@ -132,21 +133,22 @@ puts 'CREATE'
 				shopifyVariants = []
 				shopifyVariant = {}
 				nicheVariants = Niche.style_products(nicheProduct).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
-				nicheVariants.take(100).each do |nicheVariant|
+puts nicheVariants
+				nicheVariants.each do |nicheVariant|
 					unless nicheVariant[:barcode].nil?
 						shopifyVariant = ShopifyAPI.throttle { ShopifyAPI::Variant.new(
 							:barcode => nicheVariant[:barcode],
-							:grams => nicheVariant[:weight],
+							:grams => 0,#nicheVariant[:weight],
 							:fulfillment_service => "manual",
 							:inventory_management => "shopify",
 							:inventory_quantity => nicheVariant[:available_stock],
 							:option1 => nicheVariant[:color],
-							:option2 => nicheVariant[:size],
+							:option2 => nicheVariant[:size].to_s,
 							:price => nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2),
 							:requires_shipping => true,
 							:sku => nicheVariant[:barcode],
 							:taxable => true,
-							:title => nicheVariant[:color] + " - " + nicheVariant[:size]
+							:title => nicheVariant[:color] + " - " + nicheVariant[:size].to_s
 						) }
 						shopifyVariants << shopifyVariant
 					end
