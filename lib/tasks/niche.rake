@@ -8,18 +8,34 @@ namespace :niche do
 		end
 	end
 
+def createProduct(nicheProduct)
+	
+end
+
 	desc "TEST"
 	task test: :environment do
-		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
-		@nicheProducts.each do |nicheProduct|
-			puts nicheProduct#[:description] + ',' + nicheProduct[:code]
-			nicheVariants = Niche.style_products(nicheProduct).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
-			nicheVariants.each do |nicheVariant|
-				unless nicheVariant[:barcode].nil?
-					puts nicheVariant#[:color] + ' - ' + nicheVariant[:size] + ',' + nicheVariant[:barcode]
-				end
-			end
-		end
+		p = Product.new
+		p.title = "TEST"
+		p.save
+		puts p
+# 		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
+# 		@nicheProducts.each do |nicheProduct|
+# 			puts nicheProduct[:description]# + ',' + nicheProduct[:code]
+# #			if nicheProduct[:code] == 'BAG001'
+# 				nicheVariants = Niche.style_products(nicheProduct).to_hash[:product_feed_for_style_response][:product_feed_for_style_result]
+# 				#puts nicheVariants.size
+# 				nicheVariants.each do |nicheVariant|
+# 					#unless nicheVariant.nil?
+# #						puts nicheVariant.product.size
+# 					#end
+# 				end
+# #			end
+# 			#nicheVariants.each do |nicheVariant|
+# 			#	unless nicheVariant[:barcode].nil?
+# 			#		puts nicheVariant#[:color] + ' - ' + nicheVariant[:size] + ',' + nicheVariant[:barcode]
+# 			#	end
+# 			#end
+#		end
 # 		@shopifyProducts = ShopifyAPI.throttle { ShopifyAPI::Product.find(:all, params: { :limit => 250 } ) }
 # 		@shopifyProducts.each do |shopifyProduct|
 # 			metafields = ShopifyAPI.throttle { shopifyProduct.metafields }
@@ -163,18 +179,28 @@ puts order.id
 					shopifyMetafield['value_type'] = 'string'
 					shopifyMetafields << shopifyMetafield
 					# PRODUCT
-					shopifyProduct = ShopifyAPI.throttle { ShopifyAPI::Product.new(
-						:title => nicheProduct[:description],
-						:body_html => nicheProduct[:web_description],
-						:product_type => nicheProduct[:category],
-						:vendor => nicheProduct[:label][:description],
-						:images => shopifyImages,
-						:options => shopifyOptions,
-						:variants => shopifyVariants,
-						:metafields => shopifyMetafields
-					) }
-					shopifyProduct.save
-	#puts shopifyProduct.title
+# 					shopifyProduct = ShopifyAPI.throttle { ShopifyAPI::Product.new(
+# 						:title => nicheProduct[:description],
+# 						:body_html => nicheProduct[:web_description],
+# 						:product_type => nicheProduct[:category],
+# 						:vendor => nicheProduct[:label][:description],
+# 						:images => shopifyImages,
+# 						:options => shopifyOptions,
+# 						:variants => shopifyVariants,
+# 						:metafields => shopifyMetafields
+# 					) }
+					shopifyProduct = Product.new
+					shopifyProduct.title = nicheProduct[:description]
+					shopifyProduct.body_html = nicheProduct[:web_description]
+					shopifyProduct.product_type = nicheProduct[:category]
+					shopifyProduct.vendor = nicheProduct[:label][:description]
+					shopifyProduct.images = shopifyImages
+					shopifyProduct.options = shopifyOptions
+					shopifyProduct.variants = shopifyVariants.first(100)
+					shopifyProduct.metafields = shopifyMetafields
+ 					shopifyProduct.save
+	#puts 'CREATE' + shopifyProduct.title
+	puts nicheVariants
 		 			# COLLECTION
 		 			shopifyCollection = ShopifyAPI.throttle { ShopifyAPI::CustomCollection.find(:all, :params => { :title => nicheProduct[:story] } ) }
 		 			if shopifyCollection.to_a.empty?
@@ -210,23 +236,23 @@ puts order.id
 			end
 			nicheProduct = @nicheProducts.select{ |nicheProduct| nicheProduct[:code] == nicheProductCode }.first
 			if !nicheProduct
-#puts 'DELETE'
-#puts shopifyProduct.title
+puts 'DELETE'
+puts shopifyProduct.title
 				ShopifyAPI.throttle { ShopifyAPI::Product.delete(shopifyProduct.id) }
-#puts 'HIDE'
-#puts shopifyProduct.title
+puts 'HIDE'
+puts shopifyProduct.title
 			else
 				if nicheProduct[:inactive].eql? 'True'
 					shopifyProduct.published_at = nil
 					shopifyProduct.save
-#puts 'HIDE'
-#puts shopifyProduct.title
+puts 'HIDE'
+puts shopifyProduct.title
 				else
 					if shopifyProduct.published_at.nil?
 						shopifyProduct.published_at = Time.now.utc
 						shopifyProduct.save
-#puts 'SHOW'
-#puts shopifyProduct.title
+puts 'SHOW'
+puts shopifyProduct.title
 					end
 				end
 			end
