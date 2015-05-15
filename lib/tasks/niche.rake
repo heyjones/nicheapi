@@ -84,7 +84,7 @@ puts order.id
 		# LOOP TO GET ALL PRODUCTS
 		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
 		@nicheProducts.each do |nicheProduct|
-#puts nicheProduct
+puts nicheProduct
 			shopifyId = 0
 			@shopifyProducts.each do |shopifyProduct|
 				metafields = ShopifyAPI.throttle { shopifyProduct.metafields }
@@ -97,17 +97,17 @@ puts order.id
 				end
 	 		end
 	 		if shopifyId > 0
-#puts 'UPDATE'
+puts 'UPDATE'
 				shopifyProduct = ShopifyAPI.throttle { ShopifyAPI::Product.find(shopifyId) }
-#puts shopifyProduct.title
+puts shopifyProduct.title
 	 			shopifyVariants = ShopifyAPI.throttle { shopifyProduct.variants }
 				nicheVariants = Niche.style_products(nicheProduct).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
 	 			# CHECK FOR CHANGES TO VARIANTS
 				shopifyVariants.each do |shopifyVariant|
 					nicheVariant = nicheVariants.select{ |nicheVariant| nicheVariant[:barcode] == shopifyVariant.barcode }.first
 					if !nicheVariant
-#puts 'DELETE'
-#puts shopifyVariant.title
+puts 'DELETE'
+puts shopifyVariant.title
 						ShopifyAPI.throttle { ShopifyAPI::Variant.delete(shopifyVariant.id) }
 					elsif nicheVariant[:colour_inactive] == 'True'
 puts 'DELETE'
@@ -121,16 +121,17 @@ puts shopifyVariant.title
 						shopifyVariantPrice = shopifyVariant.price.to_f.round(2)
 						nicheVariantPrice = nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2)
 						if shopifyVariantInventory != nicheVariantInventory or shopifyVariantCompare != nicheVariantCompare or shopifyVariantPrice != nicheVariantPrice
-#puts shopifyVariant.title
+puts 'UPDATE'
+puts shopifyVariant.title
 		 					shopifyVariant.inventory_quantity = nicheVariantInventory
 							shopifyVariant.compare_at_price = nicheVariantCompare
 							shopifyVariant.price = nicheVariantPrice
-							shopifyVariant.save
+							ShopifyAPI.throttle { shopifyVariant.save }
 						end
 					end
 				end
 	 		else
-#puts 'CREATE'
+puts 'CREATE'
 				# IMAGES
 				shopifyImages = []
 				if nicheProduct[:web_main_picture]
@@ -180,26 +181,26 @@ puts shopifyVariant.title
 				shopifyMetafield['value_type'] = 'string'
 				shopifyMetafields << shopifyMetafield
 				# PRODUCT
-# 					shopifyProduct = ShopifyAPI.throttle { ShopifyAPI::Product.new(
-# 						:title => nicheProduct[:description],
-# 						:body_html => nicheProduct[:web_description],
-# 						:product_type => nicheProduct[:category],
-# 						:vendor => nicheProduct[:label][:description],
-# 						:images => shopifyImages,
-# 						:options => shopifyOptions,
-# 						:variants => shopifyVariants,
-# 						:metafields => shopifyMetafields
-# 					) }
-				shopifyProduct = Product.new
-				shopifyProduct.title = nicheProduct[:description]
-				shopifyProduct.body_html = nicheProduct[:web_description]
-				shopifyProduct.product_type = nicheProduct[:category]
-				shopifyProduct.vendor = nicheProduct[:label][:description]
-				shopifyProduct.images = shopifyImages
-				shopifyProduct.options = shopifyOptions
-				shopifyProduct.variants = shopifyVariants.first(100)
-				shopifyProduct.metafields = shopifyMetafields
-					shopifyProduct.save
+				shopifyProduct = ShopifyAPI.throttle { ShopifyAPI::Product.new(
+					:title => nicheProduct[:description],
+					:body_html => nicheProduct[:web_description],
+					:product_type => nicheProduct[:category],
+					:vendor => nicheProduct[:label][:description],
+					:images => shopifyImages,
+					:options => shopifyOptions,
+					:variants => shopifyVariants,
+					:metafields => shopifyMetafields
+				) }
+# 				shopifyProduct = Product.new
+# 				shopifyProduct.title = nicheProduct[:description]
+# 				shopifyProduct.body_html = nicheProduct[:web_description]
+# 				shopifyProduct.product_type = nicheProduct[:category]
+# 				shopifyProduct.vendor = nicheProduct[:label][:description]
+# 				shopifyProduct.images = shopifyImages
+# 				shopifyProduct.options = shopifyOptions
+# 				shopifyProduct.variants = shopifyVariants.first(100)
+# 				shopifyProduct.metafields = shopifyMetafields
+#				shopifyProduct.save
 #puts 'CREATE' + shopifyProduct.title
 puts nicheVariants
 	 			# COLLECTION
