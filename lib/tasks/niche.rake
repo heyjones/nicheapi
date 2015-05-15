@@ -130,6 +130,39 @@ puts shopifyVariant.title
 						end
 					end
 				end
+
+				nicheVariants.each do |nicheVariant|
+					existsVariant = false
+					unless nicheVariant[:barcode].nil?
+						unless nicheVariant[:colour_inactive] == 'True'
+							shopifyVariants.each do |shopifyVariant|
+								if nicheVariant[:barcode] == shopifyVariant.barcode
+									existsVariant = true
+								end
+							end
+							unless existsVariant
+puts 'CREATE'
+puts nicheVariant[:color] + " - " + nicheVariant[:size].to_s
+								shopifyProduct.variants << ShopifyAPI::Variant.new(
+									:barcode => nicheVariant[:barcode],
+									:grams => 0,#nicheVariant[:weight],
+									:fulfillment_service => "manual",
+									:inventory_management => "shopify",
+									:inventory_quantity => nicheVariant[:available_stock],
+									:option1 => nicheVariant[:color],
+									:option2 => nicheVariant[:size].to_s,
+									:price => nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2),
+									:requires_shipping => true,
+									:sku => nicheVariant[:barcode],
+									:taxable => true,
+									:title => nicheVariant[:color] + " - " + nicheVariant[:size].to_s
+								)
+								ShopifyAPI.throttle { shopifyProduct.save }
+							end
+						end
+					end
+				end
+
 	 		else
 puts 'CREATE'
 				# IMAGES
@@ -200,8 +233,8 @@ puts 'CREATE'
 # 				shopifyProduct.options = shopifyOptions
 # 				shopifyProduct.variants = shopifyVariants.first(100)
 # 				shopifyProduct.metafields = shopifyMetafields
-#				shopifyProduct.save
-#puts 'CREATE' + shopifyProduct.title
+				shopifyProduct.save
+puts 'CREATE' + shopifyProduct.title
 puts nicheVariants
 	 			# COLLECTION
 	 			shopifyCollection = ShopifyAPI.throttle { ShopifyAPI::CustomCollection.find(:all, :params => { :title => nicheProduct[:story] } ) }
