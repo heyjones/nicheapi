@@ -16,7 +16,7 @@ end
 	task test: :environment do
  		@nicheProducts = Niche.styles.to_hash[:style_feed_response][:style_feed_result][:style]
  		@nicheProducts.each do |nicheProduct|
- 			puts nicheProduct[:description]# + ',' + nicheProduct[:code]
+ 			puts nicheProduct[:description] + ',' + nicheProduct[:code]
  			nicheVariants = Niche.style_products(nicheProduct).to_hash[:product_feed_for_style_response][:product_feed_for_style_result][:product]
 			nicheVariants.each do |nicheVariant|
 				unless nicheVariant.nil?

@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.0'
+gem 'rails', '4.2.3'
 
 # Use sqlite3 as the database for Active Record on development
 group :development do
@@ -53,7 +53,7 @@ end
 # gem 'debugger', group: [:development, :test]
 
 gem 'shopify_api'
-gem 'shopify-api-throttle', :git => 'git://github.com/bradrees/shopify-api-throttle.git'
+gem 'shopify-api-throttle', :git => 'https://github.com/bradrees/shopify-api-throttle.git'
 gem 'rack-cors'
 gem 'savon'
 gem 'libxml-ruby'
