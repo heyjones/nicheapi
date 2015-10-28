@@ -72,9 +72,8 @@ puts shopifyVariant.title
 						shopifyVariantInventory = shopifyVariant.inventory_quantity.to_i
 						nicheVariantInventory = nicheVariant[:available_stock].to_i
 						shopifyVariantCompare = shopifyVariant.compare_at_price.to_f.round(2)
-						nicheVariantCompare = nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2)
+						nicheVariantCompare = nicheProduct[:rrp_price][:local_unit_price_ex_tax1].to_f.round(2)
 						shopifyVariantPrice = shopifyVariant.price.to_f.round(2)
-#						nicheVariantPrice = nicheProduct[:discount_price][:local_unit_price_ex_tax1].to_f.round(2)
 						nicheVariantPrice = nicheProduct[:web_price][:local_unit_price_ex_tax1].to_f.round(2)
 						if shopifyVariantInventory != nicheVariantInventory or shopifyVariantCompare != nicheVariantCompare or shopifyVariantPrice != nicheVariantPrice
 puts shopifyVariant.title
